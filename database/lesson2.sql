@@ -85,4 +85,23 @@ INSERT INTO group_account (group_id, account_id, join_date)
 VALUES (1, 1, "2023 - 06 - 19"),
 	   (1, 2, "2024 - 12 - 24");
 
-
+-- FOREIGN KEY: KHoá ngoại
+DROP TABLE IF EXISTS department;
+CREATE TABLE department(
+	id INT PRIMARY KEY,
+    `name` VARCHAR(50)
+);
+DROP TABLE IF EXISTS `account`;
+CREATE TABLE `account`(
+	id INT,
+    username VARCHAR(50),
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES department(id)
+);
+-- vd :thêm dữ liệu
+INSERT INTO department (id, `name`)
+value (1, "giam doc"),
+	  (2, "bao ve");
+TABLE department;
+INSERT INTO `account` (id, username, department_id)
+VALUES (1, "khoa.nv", 2);
