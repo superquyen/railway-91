@@ -1,21 +1,22 @@
-DROP DATABASE IF EXISTS assignment_2;
-CREATE DATABASE assignment_2;
-USE assignment_2;
+DROP DATABASE IF EXISTS assignment_02;
+CREATE DATABASE assignment_02;
+USE assignment_02;
 
--- tao bang department
+-- Tạo bảng department
 DROP TABLE IF EXISTS department;
-CREATE TABLE department(
-	department_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE department (
+    department_id INT PRIMARY KEY AUTO_INCREMENT,
     department_name VARCHAR(50)
 );
--- tao bang position
-DROP TABLE IF EXISTS `position`;
-CREATE TABLE `position`(
-	position_id INT PRIMARY KEY AUTO_INCREMENT,
+
+-- Tạo bảng position
+DROP TABLE IF EXISTS position;
+CREATE TABLE position (
+    position_id INT PRIMARY KEY AUTO_INCREMENT,
     position_name ENUM("Dev", "Test", "Scrum Master", "PM")
 );
--- CREATE TABLE account(  account_id INT PRIMARY KEY AUTO_INCREMENT,     email VARCHAR(50),      user_name VARCHAR(50) UNIQUE NOT NULL,     full_name VARCHAR(50),     department_id INT,     position_id INT,     create_date DATE DEFAULT (CURRENT_DATE),     FOREIGN KEY (department_id)    REFERENCES department (department_id)   ON UPDATE CASCADE ON DELETE CASCADE,     FOREIGN KEY (position_id)   REFERENCES posision(position_id)   ON UPDATE CASCADE ON DELETE CASCADE )
- 
+
+-- Tạo bảng account
 DROP TABLE IF EXISTS account;
 CREATE TABLE account (
     account_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -32,18 +33,20 @@ CREATE TABLE account (
         REFERENCES position (position_id)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- Tạo bảng group
 DROP TABLE IF EXISTS `group`;
-CREATE TABLE `group`(
-	group_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE `group` (
+    group_id INT PRIMARY KEY AUTO_INCREMENT,
     group_name VARCHAR(50),
     creator_id INT,
     create_date DATE DEFAULT (CURRENT_DATE),
-    FOREIGN KEY (creator_id) 
-		REFERENCES account (account_id)
-		ON UPDATE CASCADE ON DELETE CASCADE
-   
-
+    FOREIGN KEY (creator_id)
+        REFERENCES account (account_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- Tạo bảng group_account
 DROP TABLE IF EXISTS group_account;
 CREATE TABLE group_account (
     group_id INT,
@@ -57,72 +60,85 @@ CREATE TABLE group_account (
         REFERENCES account (account_id)
         ON UPDATE CASCADE ON DELETE CASCADE
 );
-DROP TABLE IF EXISTS TypeQuestion;
-CREATE TABLE type_question(
-	type_id INT PRIMARY KEY AUTO_INCREMENT,
-    type_name ENUM("Essay", "Multiple-choice")
 
+-- Tạo bảng type_question
+DROP TABLE IF EXISTS type_question;
+CREATE TABLE type_question (
+    type_id INT PRIMARY KEY AUTO_INCREMENT,
+    type_name ENUM("Essay", "Multiple-Choice")
 );
+
+-- Tạo bảng category_question
 DROP TABLE IF EXISTS category_question;
-CREATE TABLE category_question(
-	category_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE category_question (
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
     category_name VARCHAR(50)
 );
+
+-- Tạo bảng question
 DROP TABLE IF EXISTS question;
-CREATE TABLE question(
-	question_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE question (
+    question_id INT PRIMARY KEY AUTO_INCREMENT,
     content VARCHAR(50),
     category_id INT,
     type_id INT,
     creator_id INT,
     create_date DATE DEFAULT (CURRENT_DATE),
-    FOREIGN KEY (category_id) 
-		REFERENCES category_question (category_id)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (type_id) 
-		REFERENCES type_question (type_id)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (creator_id) 
-		REFERENCES account (account_id)
-		ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (category_id)
+        REFERENCES category_question (category_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (type_id)
+        REFERENCES type_question (type_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (creator_id)
+        REFERENCES account (account_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- Tạo bảng answer
 DROP TABLE IF EXISTS answer;
-CREATE TABLE answer(
-	answer_id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE answer (
+    answer_id INT PRIMARY KEY AUTO_INCREMENT,
     content VARCHAR(50),
     question_id INT,
     is_correct BOOLEAN,
-    FOREIGN KEY (question_id) 
-		REFERENCES question (question_id)
-		ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (question_id)
+        REFERENCES question (question_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- Tạo bảng exam
 DROP TABLE IF EXISTS exam;
-CREATE TABLE exam(
-	exam_id INT PRIMARY KEY AUTO_INCREMENT,
-    code char(10),
+CREATE TABLE exam (
+    exam_id INT PRIMARY KEY AUTO_INCREMENT,
+    code CHAR(10),
     title VARCHAR(50),
     category_id INT,
     duration INT,
     creator_id INT,
     create_date DATE DEFAULT (CURRENT_DATE),
-    FOREIGN KEY (category_id) 
-		REFERENCES category_question (category_id)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (creator_id) 
-		REFERENCES account (account_id)
-		ON UPDATE CASCADE ON DELETE CASCADE
-        );
-DROP TABLE IF EXISTS exam_question;
-CREATE TABLE exam_question(
-	exam_id INT,
-    question_id INT,
-    FOREIGN KEY (exam_id) 
-		REFERENCES exam (exam_id)
-		ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (question_id) 
-		REFERENCES question (question_id)
-		ON UPDATE CASCADE ON DELETE CASCADE
+    FOREIGN KEY (category_id)
+        REFERENCES category_question (category_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (creator_id)
+        REFERENCES account (account_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+-- Tạo bảng exam_question
+DROP TABLE IF EXISTS exam_question;
+CREATE TABLE exam_question (
+    exam_id INT,
+    question_id INT,
+    PRIMARY KEY (exam_id, question_id),
+    FOREIGN KEY (exam_id)
+        REFERENCES exam (exam_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (question_id)
+        REFERENCES question (question_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 -- Thêm dữ liệu cho bảng department
 INSERT INTO department  (department_name)
 VALUES                  ("Marketing"    ),
@@ -250,4 +266,3 @@ VALUES                      (1         , 1      ),
                             (8         , 8      ),
                             (9         , 2      ),
                             (10        , 10     );
-

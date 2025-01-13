@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS assignment_05;
-CREATE DATABASE assignment_05;
-USE assignment_05;
+DROP DATABASE IF EXISTS assignment_03;
+CREATE DATABASE assignment_03;
+USE assignment_03;
 
 -- Tạo bảng department
 DROP TABLE IF EXISTS department;
@@ -267,103 +267,74 @@ VALUES                      (1         , 1      ),
                             (9         , 2      ),
                             (10        , 10     );
 
--- Question 1: Tạo view có chứa danh sách
--- nhân viên thuộc phòng ban "Sale"
-CREATE OR REPLACE VIEW view_01 AS
+-- Question 2: Lấy ra tất cả các phòng ban
+SELECT *
+FROM department;
+
+-- Question 3: Lấy ra id của phòng ban "Sale"
+SELECT department_id
+FROM department
+WHERE department_name = "Sale";
+
+-- Question 4: Lấy ra account có full name dài nhất
 SELECT *
 FROM account
-WHERE department_id =
-    (SELECT department_id
-    FROM department
-    WHERE department_name = "Sale");
+ORDER BY CHAR_LENGTH(full_name) DESC
+LIMIT 1;
 
--- Question 2: Tạo view có chứa thông tin
--- các account tham gia vào nhiều group nhất
-CREATE OR REPLACE VIEW view_02 AS
-SELECT account.*
-FROM group_account
-RIGHT JOIN account USING (account_id)
-GROUP BY account_id
-HAVING COUNT(group_id) =
-    (SELECT MAX(group_count)
-    FROM
-        (SELECT COUNT(group_id) AS group_count
-        FROM group_account
-        RIGHT JOIN account USING (account_id)
-        GROUP BY account_id) AS t);
-        -- tạo tệp CTE cho bài 2
-CREATE OR REPLACE VIEW view_02 AS
-WITH c2 AS (
-    SELECT account.*, COUNT(group_id) AS group_count
-    FROM group_account
-    RIGHT JOIN account USING (account_id)
-    GROUP BY account_id
-)
+-- Question 5: Lấy ra account có full name dài nhất
+-- và thuộc phòng ban có id = 3
 SELECT *
-FROM c2
-WHERE group_count =
-    (SELECT MAX(group_count)
-    FROM c2);
--- Question 3: Tạo view có chứa câu hỏi
--- có những content quá dài (content quá 10 từ
--- được coi là quá dài) và xóa nó đi
-CREATE OR REPLACE VIEW view_03 AS
-SELECT *
-FROM question
-WHERE CHAR_LENGTH(content) > 10;
-
-DELETE FROM view_03;
-
--- Question 4: Tạo view có chứa danh sách
--- các phòng ban có nhiều nhân viên nhất
-CREATE OR REPLACE VIEW view_04 AS
-SELECT department.*
 FROM account
-RIGHT JOIN department USING (department_id)
-GROUP BY department_id
-HAVING COUNT(account_id) =
-    (SELECT MAX(account_count)
-    FROM
-        (SELECT COUNT(account_id) AS account_count
-        FROM account
-        RIGHT JOIN department USING (department_id)
-        GROUP BY department_id) AS t);
+WHERE department_id = 3
+ORDER BY CHAR_LENGTH(full_name) DESC
+LIMIT 1;
 
-CREATE OR REPLACE VIEW view_04 AS
-WITH c4 AS (
-    SELECT department.*, COUNT(account_id) AS account_count
-    FROM account
-    RIGHT JOIN department USING (department_id)
-    GROUP BY department_id
-)
+-- Question 6: Lấy ra tên group tạo trước ngày 20/12/2019
 SELECT *
-FROM c4
-WHERE account_count =
-    (SELECT MAX(account_count)
-    FROM c4);
-
--- Question 5: Tạo view có chứa tất các
--- các câu hỏi do user họ Nguyễn tạo
+FROM `group`
+WHERE create_date < "2019-12-20";
+-- question 7: lấy ra ID của question có >= 4 câu trả lời
+SELECT question_id
+FROM answer
+GROUP BY question_id
+HAVING COUNT(question_id) >= 4;
+-- question 8: lấy ra các mã đề thi có thời gian thi >= 60 phút và được tạo trước ngày 20/12/2019
 SELECT *
-FROM question
-WHERE creator_id IN (
-SELECT account_id
-FROM account 
-WHERE full_name LIKE "nguyen%");
-CREATE OR REPLACE VIEW view_05 AS
+FROM exam
+WHERE duration >= 60 AND create_date < "2019-12-20";
+-- question 9: lấy ra 5 group được tạo gần đây nhất 
 SELECT *
-FROM question
-WHERE creator_id IN
-    (SELECT  account_id
-    FROM account
-    WHERE full_name LIKE "Nguyễn%");
-  
+FROM `group`
+ORDER BY create_date DESC
+LIMIT 5;
+-- question 10 : đếm số nhân viên thuộc department có id = 2
+SELECT COUNT(account_id)
+FROM account
+WHERE department_id = 2;
+-- question 12 : xoá tất cả các exam được tạo trước ngày 20/12/2019
+DELETE FROM exam
+WHERE create_date < " 2019-12-19";
+-- question 13 : xoá tất cả các question có nội dung bắt đầu bằng từ "câu hỏi"
+DELETE FROM question
+WHERE content LIKE "câu hỏi%";
+-- question 14 : Update thông tin của Account có id = 5 thành tên " Nguyễn Bá Lộc" và email thành loc.nguyenba@gmail.com.vn
+UPDATE account
+SET fullname = "Nguyễn Bá Lộc", email = "loc.nguyenba@gmail.com.vn"
+WHERE account_id = 5;
+-- question 15 : Update account có id = 5 sẽ thuộc group có id = 4
+UPDATE group_account
+SET group_id = 4
+WHERE  account_id = 5;
 
 
 
 
 
-
+-- question 11 : lấy ra nhân viên có tên bắt đâif bằng chữ "D" và kết thúc bằng chữ "o"
+SELECT *
+FROM account
+WHERE full_name LIKE "D%o";
 
 
 
