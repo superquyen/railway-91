@@ -1,10 +1,19 @@
 public class Program {
     public static void main(String[] args) {
-        Dog dog1 = new Dog();
-        dog1.name = " Cooking Oil";
-        dog1.age = 18;
-        dog1.showInfor();
-        int sum = dog1.sum(1, 99);
-        System.out.println("sum = " + sum);
+       Department department = new Department();
+       department.id = 1;
+       department.name = "Giám đốc";
+       System.out.println("Tên phòng  = " + department);
+       Position position = new Position();
+       position.id = 1;
+       Account account = new Account();
+       Group group = new Group();
+       GroupAccount groupAccount = new GroupAccount();
+       TypeQuestion typeQuestion = new TypeQuestion();
+       CategoryQuestion categoryQuestion = new CategoryQuestion();
+       Question question = new Question();
+       Answer answer = new Answer();
+       Exam exam  = new Exam();
+       ExamQuestion examQuestion = new ExamQuestion();
     }
 }

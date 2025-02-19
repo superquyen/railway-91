@@ -290,7 +290,7 @@ HAVING COUNT(group_id) =
         (SELECT COUNT(group_id) AS group_count
         FROM group_account
         RIGHT JOIN account USING (account_id)
-        GROUP BY account_id) AS t);
+        GROUP BY accougroupnt_id) AS t);
         -- tạo tệp CTE cho bài 2
 CREATE OR REPLACE VIEW view_02 AS
 WITH c2 AS (

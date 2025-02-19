@@ -6,7 +6,7 @@ public class Exam {
     String title;
     CategoryQuestion category;
     int duration;
-    Account account;
-    LocalDate createDate;
+    Account creator;
+    LocalDate createdDate;
     Question[] questions;
 }
