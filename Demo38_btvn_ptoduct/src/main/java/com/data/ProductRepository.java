@@ -146,6 +146,7 @@ public class ProductRepository {
             Product product= query.getSingleResultOrNull();
             if(product!= null){
                 session.delete(product);
+                System.out.println("bạn đã xoá thành công");
             }else {
                 System.out.println("không tồn tại product này");
             }
@@ -167,6 +168,7 @@ public class ProductRepository {
             Product product= query.getSingleResultOrNull();
             if(product!= null){
                 session.delete(product);
+                System.out.println("Bạn đã xoá thành công");
             }else {
                 System.out.println("không tồn tại product này");
             }
