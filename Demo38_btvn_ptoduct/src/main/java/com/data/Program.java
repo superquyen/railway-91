@@ -50,6 +50,7 @@ public class Program {
                     break;
                 case 8:
                     pr.deleteProductByQuantity();
+
                     break;
                 case 9:
                     System.out.println("Cảm ơn bạn đã sử dụng dịch vụ");
